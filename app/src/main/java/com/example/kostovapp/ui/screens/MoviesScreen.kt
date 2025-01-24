@@ -20,12 +20,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.kostovapp.ui.composables.MovieItem
 import com.example.kostovapp.viewmodel.MoviesViewModel
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MoviesScreen(
     navController: NavHostController,
-    viewModel: MoviesViewModel = getViewModel()
+    viewModel: MoviesViewModel = koinViewModel()
 ) {
     val movies by viewModel.movies.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
@@ -45,7 +45,6 @@ fun MoviesScreen(
             Text(text = "View Favorites")
         }
 
-        // Movie List
         Box(modifier = Modifier.fillMaxSize()) {
             if (isLoading) {
                 Box(

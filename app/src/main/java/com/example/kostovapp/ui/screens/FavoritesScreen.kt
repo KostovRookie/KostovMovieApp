@@ -66,11 +66,7 @@ fun FavoritesScreen(
                     FavoriteMovieItem(
                         movie = movie,
                         onClick = {
-                            navController.currentBackStackEntry?.savedStateHandle?.set(
-                                "movie",
-                                movie
-                            )
-                            navController.navigate("details")
+                            navController.navigate("details/${movie.id}")
                         },
                         onRemoveClick = { viewModel.removeFavorite(movie.id.toString()) }
                     )
@@ -92,13 +88,15 @@ fun FavoriteMovieItem(
             .padding(8.dp)
             .clickable { onClick() }
     ) {
+        val posterUrl = movie.poster?.let { "https://image.tmdb.org/t/p/w500$it" }
+            ?: "https://via.placeholder.com/100x150?text=No+Image"
+
         Image(
             painter = rememberAsyncImagePainter(
                 ImageRequest.Builder(LocalContext.current)
-                    .data(data = "https://image.tmdb.org/t/p/w500${movie.poster}")
-                    .apply(block = fun ImageRequest.Builder.() {
-                        crossfade(true)
-                    }).build()
+                    .data(posterUrl)
+                    .crossfade(true)
+                    .build()
             ),
             contentDescription = "${movie.title} poster",
             modifier = Modifier

@@ -11,7 +11,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -28,12 +27,11 @@ fun MoviesScreen(
     viewModel: MoviesViewModel = koinViewModel()
 ) {
     val movies by viewModel.movies.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
-    val favorites by viewModel.favorites.collectAsState(emptySet())
 
-    LaunchedEffect(Unit) {
-        viewModel.loadMovies()
-    }
+    val isLoadingState = viewModel.isLoading.collectAsState()
+    val isLoading = isLoadingState.value
+
+    val favorites by viewModel.favorites.collectAsState(emptySet())
 
     Column(modifier = Modifier.fillMaxSize()) {
         Button(
@@ -43,6 +41,14 @@ fun MoviesScreen(
                 .padding(8.dp)
         ) {
             Text(text = "View Favorites")
+        }
+        Button(
+            onClick = { navController.navigate("forLaterWatching") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        ) {
+            Text("View For Later Watching")
         }
 
         Box(modifier = Modifier.fillMaxSize()) {
@@ -73,12 +79,9 @@ fun MoviesScreen(
                                     viewModel.addFavorite(movie.id.toString())
                                 }
                             },
+
                             onClick = {
-                                navController.currentBackStackEntry?.savedStateHandle?.set(
-                                    "movie",
-                                    movie
-                                )
-                                navController.navigate("details")
+                                navController.navigate("details/${movie.id}")
                             }
                         )
                     }

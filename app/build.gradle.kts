@@ -3,7 +3,11 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
-    id("kotlin-parcelize") // Add this plugin
+    id("kotlin-parcelize")
+    //pl;id("kotlin-kapt")
+    id("com.google.devtools.ksp")
+
+
 }
 
 android {
@@ -51,6 +55,7 @@ android {
 
 dependencies {
 
+    // Kotlin
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
@@ -68,27 +73,34 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-        // Compose
-        implementation(libs.ui)
-        implementation(libs.material3)
-        implementation(libs.androidx.navigation.compose)
 
-        // Koin
-        implementation(libs.koin.android)
-        implementation(libs.koin.androidx.compose)
+    // Room
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+    implementation(libs.room.runtime)
+    annotationProcessor(libs.room.compiler)
 
-        // Retrofit
-        implementation(libs.retrofit)
-        implementation(libs.converter.gson)
+    // Compose
+    implementation(libs.ui)
+    implementation(libs.material3)
+    implementation(libs.androidx.navigation.compose)
 
-        // DataStore
-        implementation(libs.androidx.datastore.preferences)
+    // Koin
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
 
-        // Coil for image loading
-        implementation(libs.coil.compose)
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
 
-        // Coroutine support
-        implementation(libs.kotlinx.coroutines.android)
+    // DataStore
+    implementation(libs.androidx.datastore.preferences)
+
+    // Coil for image loading
+    implementation(libs.coil.compose)
+
+    // Coroutine support
+    implementation(libs.kotlinx.coroutines.android)
     implementation("androidx.compose.material3:material3:1.2.0")
 
 }

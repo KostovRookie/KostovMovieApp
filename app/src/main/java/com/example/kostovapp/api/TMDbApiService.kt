@@ -1,4 +1,4 @@
-package com.example.kostovapp
+package com.example.kostovapp.api
 
 import com.example.kostovapp.model.Movie
 import com.example.kostovapp.model.TMDbResponse

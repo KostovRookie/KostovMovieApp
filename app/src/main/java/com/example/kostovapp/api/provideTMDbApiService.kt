@@ -1,6 +1,5 @@
-package com.example.kostovapp.model
+package com.example.kostovapp.api
 
-import com.example.kostovapp.TMDbApiService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

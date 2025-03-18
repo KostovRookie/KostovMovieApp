@@ -8,6 +8,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
 import com.example.kostovapp.navigation.MoviesNavHost
+import com.example.kostovapp.viewmodel.MoviesViewModel
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,5 +27,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MoviesAppNavigation() {
     val navController = rememberNavController()
-    MoviesNavHost(navController = navController)
+    val viewModel: MoviesViewModel = koinViewModel()
+
+    MoviesNavHost(navController = navController, viewModel = viewModel)
 }

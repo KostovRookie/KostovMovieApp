@@ -10,6 +10,7 @@ import com.example.kostovapp.model.room.MovieEntity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -22,6 +23,10 @@ class MoviesViewModel(
     private val _movies = MutableStateFlow<List<Movie>>(emptyList())
     val movies: StateFlow<List<Movie>> = _movies
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+
     val favorites = dataStoreManager.favoriteMovies.stateIn(
         viewModelScope,
         SharingStarted.Lazily,
@@ -31,7 +36,11 @@ class MoviesViewModel(
     private val _savedMovies = MutableStateFlow<List<MovieEntity>>(emptyList())
     val savedMovies: StateFlow<List<MovieEntity>> = _savedMovies
 
-    val isLoading = MutableStateFlow(false)
+    //val isLoading = MutableStateFlow(false)
+
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+
 
     init {
         loadMovies()
@@ -43,6 +52,24 @@ class MoviesViewModel(
             movieDao.getAllMovies().collect { movies ->
                 _savedMovies.value =
                     movies
+            }
+        }
+    }
+
+    fun searchMovies(query: String) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _searchQuery.value = query
+            try {
+                val response = apiService.searchMovies(
+                    apiKey = "0dad83007bea60d99261a92e4eefda99",
+                    query = query
+                )
+                _movies.value = response.results
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                _isLoading.value = false
             }
         }
     }

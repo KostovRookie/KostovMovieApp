@@ -4,10 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
     id("kotlin-parcelize")
-    //pl;id("kotlin-kapt")
     id("com.google.devtools.ksp")
-
-
 }
 
 android {
@@ -84,6 +81,13 @@ dependencies {
     implementation(libs.ui)
     implementation(libs.material3)
     implementation(libs.androidx.navigation.compose)
+
+    // Jetpack Compose Navigation
+
+    val nav_version = "2.8.9"
+
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+    implementation(libs.androidx.compose.material)
 
     // Koin
     implementation(libs.koin.android)

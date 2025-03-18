@@ -25,6 +25,9 @@ room = "2.6.1"
 
 
 [libraries]
+
+androidx-compose-material = { module = "androidx.compose.material:material", version = "1.7.8" }
+
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }

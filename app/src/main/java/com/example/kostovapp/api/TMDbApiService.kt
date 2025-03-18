@@ -19,4 +19,11 @@ interface TMDbApiService {
         @Path("movie_id") movieId: String,
         @Query("api_key") apiKey: String
     ): Movie
+
+    @GET("search/movie")
+    suspend fun searchMovies(
+        @Query("api_key") apiKey: String,
+        @Query("query") query: String,
+        @Query("page") page: Int = 1
+    ): TMDbResponse
 }

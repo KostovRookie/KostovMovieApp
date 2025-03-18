@@ -20,11 +20,26 @@ class MoviesViewModel(
     private val movieDao: MovieDao
 ) : ViewModel() {
 
-    private val _movies = MutableStateFlow<List<Movie>>(emptyList())
-    val movies: StateFlow<List<Movie>> = _movies
+    private val _popularMovies = MutableStateFlow<List<Movie>>(emptyList())
+    val popularMovies: StateFlow<List<Movie>> = _popularMovies.asStateFlow()
+
+    private val _trendingMovies = MutableStateFlow<List<Movie>>(emptyList())
+    val trendingMovies: StateFlow<List<Movie>> = _trendingMovies.asStateFlow()
+
+    private val _upcomingMovies = MutableStateFlow<List<Movie>>(emptyList())
+    val upcomingMovies: StateFlow<List<Movie>> = _upcomingMovies.asStateFlow()
+
+    private val _searchResults = MutableStateFlow<List<Movie>>(emptyList())
+    val searchResults: StateFlow<List<Movie>> = _searchResults.asStateFlow()
+
+    private val _isSearching = MutableStateFlow(false)
+    val isSearching: StateFlow<Boolean> = _isSearching.asStateFlow()
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+    private val _trailerUrl = MutableStateFlow<String?>(null)
+    val trailerUrl: StateFlow<String?> = _trailerUrl.asStateFlow()
 
 
     val favorites = dataStoreManager.favoriteMovies.stateIn(
@@ -35,12 +50,6 @@ class MoviesViewModel(
 
     private val _savedMovies = MutableStateFlow<List<MovieEntity>>(emptyList())
     val savedMovies: StateFlow<List<MovieEntity>> = _savedMovies
-
-    //val isLoading = MutableStateFlow(false)
-
-    private val _searchQuery = MutableStateFlow("")
-    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
-
 
     init {
         loadMovies()
@@ -59,13 +68,13 @@ class MoviesViewModel(
     fun searchMovies(query: String) {
         viewModelScope.launch {
             _isLoading.value = true
-            _searchQuery.value = query
+            _isSearching.value = true
             try {
                 val response = apiService.searchMovies(
                     apiKey = "0dad83007bea60d99261a92e4eefda99",
                     query = query
                 )
-                _movies.value = response.results
+                _searchResults.value = response.results
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
@@ -74,14 +83,37 @@ class MoviesViewModel(
         }
     }
 
-    fun loadMovies() {
+    fun loadMovieTrailer(movieId: Int) {
         viewModelScope.launch {
             try {
                 val response =
-                    apiService.getPopularMovies(apiKey = "0dad83007bea60d99261a92e4eefda99")
-                _movies.value = response.results
+                    apiService.getMovieVideos(movieId, apiKey = "0dad83007bea60d99261a92e4eefda99")
+                val trailer = response.results.find { it.site == "YouTube" && it.type == "Trailer" }
+                _trailerUrl.value = trailer?.key?.let { "https://www.youtube.com/watch?v=$it" }
             } catch (e: Exception) {
                 e.printStackTrace()
+            }
+        }
+    }
+
+    fun loadMovies() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val popularResponse =
+                    apiService.getPopularMovies(apiKey = "0dad83007bea60d99261a92e4eefda99")
+                val trendingResponse =
+                    apiService.getTrendingMovies(apiKey = "0dad83007bea60d99261a92e4eefda99")
+                val upcomingResponse =
+                    apiService.getUpcomingMovies(apiKey = "0dad83007bea60d99261a92e4eefda99")
+
+                _popularMovies.value = popularResponse.results
+                _trendingMovies.value = trendingResponse.results
+                _upcomingMovies.value = upcomingResponse.results
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                _isLoading.value = false
             }
         }
     }

@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -37,12 +38,21 @@ fun MoviesAppNavigation() {
     val navController = rememberNavController()
     val viewModel: MoviesViewModel = koinViewModel()
     val showDialog = remember { mutableStateOf(true) }
+    var selectedTabIndex = remember { mutableIntStateOf(0) }
 
     Scaffold(
-        bottomBar = { BottomNavigationBar(navController) }
+        bottomBar = {
+            BottomNavigationBar(navController, selectedTabIndex.intValue) { newIndex ->
+                selectedTabIndex.intValue = newIndex
+            }
+        }
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
-            MoviesNavHost(navController = navController, viewModel = viewModel)
+            MoviesNavHost(
+                navController = navController, viewModel = viewModel,
+                selectedTabIndex = selectedTabIndex.intValue, onTabSelected = { newIndex ->
+                    selectedTabIndex.intValue = newIndex
+                })
         }
     }
 

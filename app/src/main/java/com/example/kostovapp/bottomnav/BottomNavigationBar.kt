@@ -1,36 +1,55 @@
 package com.example.kostovapp.bottomnav
 
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
-import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.NavHostController
 
 @Composable
-fun BottomNavigationBar(navController: NavController) {
-    val items = listOf(
-        BottomNavItem.Home,
-        BottomNavItem.Favorites,
-        BottomNavItem.Database
-    )
+fun BottomNavigationBar(
+    navController: NavHostController,
+    selectedTabIndex: Int,
+    onTabSelected: (Int) -> Unit
+) {
+    NavigationBar {
+        val items = listOf("Home", "Favorites", "Watch Later")
 
-    BottomNavigation(
-        backgroundColor = MaterialTheme.colors.primary,
-        contentColor = Color.White
-    ) {
-        val navBackStackEntry = navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry.value?.destination?.route
-
-        items.forEach { item ->
-            BottomNavigationItem(
-                icon = { Icon(item.icon, contentDescription = item.title) },
-                label = { Text(item.title) },
-                selected = currentRoute == item.route,
+        items.forEachIndexed { index, title ->
+            NavigationBarItem(
+                icon = {
+                    Icon(
+                        imageVector = when (title) {
+                            "Home" -> Icons.Default.Home
+                            "Favorites" -> Icons.Default.Favorite
+                            "Watch Later" -> Icons.Default.Check
+                            else -> Icons.Default.Home
+                        },
+                        contentDescription = title
+                    )
+                },
+                label = { Text(title) },
+                selected = selectedTabIndex == index,
                 onClick = {
-                    navController.navigate(item.route) {
-                        popUpTo(navController.graph.startDestinationId) { saveState = true }
-                        launchSingleTop = true
-                        restoreState = true
+                    onTabSelected(index)
+                    when (title) {
+                        "Home" -> {
+                            if (navController.currentDestination?.route == "movies") {
+                                navController.navigate("movies") {
+                                    popUpTo("movies") { inclusive = true }
+                                }
+                            } else {
+                                navController.navigate("movies")
+                            }
+                        }
+
+                        "Favorites" -> navController.navigate("favorites")
+                        "Watch Later" -> navController.navigate("forLaterWatching")
                     }
                 }
             )

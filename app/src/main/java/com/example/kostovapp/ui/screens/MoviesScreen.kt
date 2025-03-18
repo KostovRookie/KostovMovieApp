@@ -9,6 +9,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.ScrollableTabRow
+import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -27,20 +29,21 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun MoviesScreen(
     navController: NavHostController,
-    viewModel: MoviesViewModel = koinViewModel()
+    viewModel: MoviesViewModel = koinViewModel(),
+    selectedTabIndex: Int,
+    onTabSelected: (Int) -> Unit
 ) {
-    val movies by viewModel.movies.collectAsState()
-
-    val isLoadingState = viewModel.isLoading.collectAsState()
-    val isLoading = isLoadingState.value
-
-    val favorites by viewModel.favorites.collectAsState(emptySet())
-
+    val popularMovies by viewModel.popularMovies.collectAsState()
+    val trendingMovies by viewModel.trendingMovies.collectAsState()
+    val upcomingMovies by viewModel.upcomingMovies.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
     var searchText = remember { mutableStateOf(TextFieldValue("")) }
+    val searchResults by viewModel.searchResults.collectAsState()
+    val isSearching by viewModel.isSearching.collectAsState()
 
+    val tabTitles = listOf("Popular", "Trending", "Upcoming")
 
     Column(modifier = Modifier.fillMaxSize()) {
-
         OutlinedTextField(
             value = searchText.value,
             onValueChange = { newText ->
@@ -58,39 +61,59 @@ fun MoviesScreen(
             singleLine = true
         )
 
+        if (!isSearching) {
+            ScrollableTabRow(
+                selectedTabIndex = selectedTabIndex,
+                modifier = Modifier.fillMaxWidth(),
+                edgePadding = 16.dp
+            ) {
+                tabTitles.forEachIndexed { index, title ->
+                    Tab(
+                        selected = selectedTabIndex == index,
+                        onClick = { onTabSelected(index) },
+                        text = { Text(title) }
+                    )
+                }
+            }
+        }
+
         Box(modifier = Modifier.fillMaxSize()) {
             if (isLoading) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
-            } else if (movies.isEmpty()) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(text = "No movies available.")
-                }
             } else {
-                LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    items(movies) { movie ->
-                        MovieItem(
-                            movie = movie,
-                            isFavorite = favorites.contains(movie.id.toString()),
-                            onFavoriteClick = {
-                                if (favorites.contains(movie.id.toString())) {
-                                    viewModel.removeFavorite(movie.id.toString())
-                                } else {
-                                    viewModel.addFavorite(movie.id.toString())
-                                }
-                            },
+                val movies = if (isSearching) searchResults else when (selectedTabIndex) {
+                    0 -> popularMovies
+                    1 -> trendingMovies
+                    2 -> upcomingMovies
+                    else -> popularMovies
+                }
 
-                            onClick = {
-                                navController.navigate("details/${movie.id}")
-                            }
-                        )
+                if (movies.isEmpty()) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text(text = "No movies found.")
+                    }
+                } else {
+                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+                        items(movies) { movie ->
+                            MovieItem(
+                                movie = movie,
+                                isFavorite = viewModel.favorites.collectAsState(emptySet()).value.contains(
+                                    movie.id.toString()
+                                ),
+                                onFavoriteClick = {
+                                    if (viewModel.favorites.value.contains(movie.id.toString())) {
+                                        viewModel.removeFavorite(movie.id.toString())
+                                    } else {
+                                        viewModel.addFavorite(movie.id.toString())
+                                    }
+                                },
+                                onClick = {
+                                    navController.navigate("details/${movie.id}")
+                                }
+                            )
+                        }
                     }
                 }
             }

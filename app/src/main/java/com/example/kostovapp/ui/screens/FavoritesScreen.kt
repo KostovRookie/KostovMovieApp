@@ -41,8 +41,9 @@ fun FavoritesScreen(
     navController: NavHostController,
     viewModel: MoviesViewModel = koinViewModel()
 ) {
-    val movies by viewModel.movies.collectAsState()
+    val movies by viewModel.favorites.collectAsState()
     val favorites by viewModel.favorites.collectAsState(emptySet())
+    val allMovies = viewModel.popularMovies.value + viewModel.trendingMovies.value + viewModel.upcomingMovies.value
 
     LaunchedEffect(Unit) {
         if (movies.isEmpty()) {
@@ -50,7 +51,7 @@ fun FavoritesScreen(
         }
     }
 
-    val favoriteMovies = movies.filter { favorites.contains(it.id.toString()) }
+    val favoriteMovies = allMovies.filter { it.id.toString() in favorites }
 
     Box(modifier = Modifier.fillMaxSize()) {
         if (favoriteMovies.isEmpty()) {

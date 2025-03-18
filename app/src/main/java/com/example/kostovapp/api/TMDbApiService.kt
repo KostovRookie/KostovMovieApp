@@ -2,6 +2,7 @@ package com.example.kostovapp.api
 
 import com.example.kostovapp.model.Movie
 import com.example.kostovapp.model.TMDbResponse
+import com.example.kostovapp.model.VideoResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -26,4 +27,20 @@ interface TMDbApiService {
         @Query("query") query: String,
         @Query("page") page: Int = 1
     ): TMDbResponse
+
+    @GET("trending/movie/week")
+    suspend fun getTrendingMovies(
+        @Query("api_key") apiKey: String
+    ): TMDbResponse
+
+    @GET("movie/upcoming")
+    suspend fun getUpcomingMovies(
+        @Query("api_key") apiKey: String
+    ): TMDbResponse
+
+    @GET("movie/{movie_id}/videos")
+    suspend fun getMovieVideos(
+        @Path("movie_id") movieId: Int,
+        @Query("api_key") apiKey: String
+    ): VideoResponse
 }

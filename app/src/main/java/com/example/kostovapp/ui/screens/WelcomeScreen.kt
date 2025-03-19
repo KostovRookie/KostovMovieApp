@@ -60,7 +60,7 @@ fun WelcomeScreen(onDismiss: () -> Unit) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    BouncingImage() // ✅ Bouncing image animation
+                    BouncingImage()
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(
                         "Enjoy your experience with this movie app! 🎬",

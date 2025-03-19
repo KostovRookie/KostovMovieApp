@@ -185,7 +185,7 @@ fun MovieDetailsScreen(
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
             ) {
-                Text("Watch Trailer 🎬", color = Color.White)
+                Text("Watch Trailer", color = Color.White)
             }
         } else {
             Text(

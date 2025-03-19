@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import com.example.kostovapp.model.Movie
+import com.example.kostovapp.data.model.Movie
 import com.example.kostovapp.viewmodel.MoviesViewModel
 import org.koin.androidx.compose.koinViewModel
 

@@ -1,4 +1,4 @@
-package com.example.kostovapp.model.room
+package com.example.kostovapp.data.room
 
 import androidx.room.Dao
 import androidx.room.Delete

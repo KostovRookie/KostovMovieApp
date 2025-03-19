@@ -1,4 +1,4 @@
-package com.example.kostovapp.ui.composables
+package com.example.kostovapp.ui.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
@@ -33,7 +33,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
-import com.example.kostovapp.model.Movie
+import com.example.kostovapp.data.model.Movie
 
 @Composable
 fun MovieItem(

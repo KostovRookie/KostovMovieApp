@@ -1,13 +1,8 @@
-package com.example.kostovapp.model
-
+package com.example.kostovapp.data.model
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
-
-data class TMDbResponse(
-    val results: List<Movie>
-)
 
 @Parcelize
 data class Movie(

@@ -1,4 +1,4 @@
-package com.example.kostovapp.bottomnav
+package com.example.kostovapp.navigationcomponents
 
 import androidx.compose.material.Icon
 import androidx.compose.material.Text

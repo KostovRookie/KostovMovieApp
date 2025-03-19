@@ -10,7 +10,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.example.kostovapp.model.Movie
+import com.example.kostovapp.data.model.Movie
 import com.example.kostovapp.viewmodel.MoviesViewModel
 import org.koin.androidx.compose.koinViewModel
 

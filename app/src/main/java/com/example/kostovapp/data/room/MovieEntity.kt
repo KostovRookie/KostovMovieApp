@@ -1,4 +1,4 @@
-package com.example.kostovapp.model.room
+package com.example.kostovapp.data.room
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

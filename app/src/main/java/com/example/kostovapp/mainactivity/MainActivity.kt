@@ -15,7 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.example.kostovapp.bottomnav.BottomNavigationBar
+import com.example.kostovapp.navigationcomponents.BottomNavigationBar
 import com.example.kostovapp.navigation.MoviesNavHost
 import com.example.kostovapp.viewmodel.MoviesViewModel
 import org.koin.androidx.compose.koinViewModel

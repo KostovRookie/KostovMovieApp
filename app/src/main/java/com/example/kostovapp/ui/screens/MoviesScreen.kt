@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.kostovapp.ui.composables.MovieItem
+import com.example.kostovapp.ui.components.MovieItem
 import com.example.kostovapp.viewmodel.MoviesViewModel
 import org.koin.androidx.compose.koinViewModel
 

@@ -2,11 +2,13 @@ package com.example.kostovapp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.kostovapp.BuildConfig
 import com.example.kostovapp.api.TMDbApiService
 import com.example.kostovapp.data.model.Movie
 import com.example.kostovapp.data.datastore.DataStoreManager
 import com.example.kostovapp.data.room.MovieDao
 import com.example.kostovapp.data.room.MovieEntity
+import com.example.kostovapp.utils.Constants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -51,6 +53,8 @@ class MoviesViewModel(
     private val _savedMovies = MutableStateFlow<List<MovieEntity>>(emptyList())
     val savedMovies: StateFlow<List<MovieEntity>> = _savedMovies
 
+    private val apiKey = BuildConfig.API_KEY
+
     init {
         loadMovies()
         observeSavedMovies()
@@ -71,7 +75,7 @@ class MoviesViewModel(
             _isSearching.value = true
             try {
                 val response = apiService.searchMovies(
-                    apiKey = "0dad83007bea60d99261a92e4eefda99",
+                    apiKey = apiKey,
                     query = query
                 )
                 _searchResults.value = response.results
@@ -87,9 +91,9 @@ class MoviesViewModel(
         viewModelScope.launch {
             try {
                 val response =
-                    apiService.getMovieVideos(movieId, apiKey = "0dad83007bea60d99261a92e4eefda99")
+                    apiService.getMovieVideos(movieId, apiKey = apiKey)
                 val trailer = response.results.find { it.site == "YouTube" && it.type == "Trailer" }
-                _trailerUrl.value = trailer?.key?.let { "https://www.youtube.com/watch?v=$it" }
+                _trailerUrl.value = trailer?.key?.let { Constants.YOUTUBE_WATCH_URL + it }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -101,11 +105,11 @@ class MoviesViewModel(
             _isLoading.value = true
             try {
                 val popularResponse =
-                    apiService.getPopularMovies(apiKey = "0dad83007bea60d99261a92e4eefda99")
+                    apiService.getPopularMovies(apiKey = apiKey)
                 val trendingResponse =
-                    apiService.getTrendingMovies(apiKey = "0dad83007bea60d99261a92e4eefda99")
+                    apiService.getTrendingMovies(apiKey = apiKey)
                 val upcomingResponse =
-                    apiService.getUpcomingMovies(apiKey = "0dad83007bea60d99261a92e4eefda99")
+                    apiService.getUpcomingMovies(apiKey = apiKey)
 
                 _popularMovies.value = popularResponse.results
                 _trendingMovies.value = trendingResponse.results

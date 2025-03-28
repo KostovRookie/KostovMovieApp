@@ -1,6 +1,5 @@
 package com.example.kostovapp.api
 
-import com.example.kostovapp.data.model.Movie
 import com.example.kostovapp.data.model.TMDbResponse
 import com.example.kostovapp.data.model.VideoResponse
 import retrofit2.http.GET
@@ -14,12 +13,6 @@ interface TMDbApiService {
         @Query("api_key") apiKey: String,
         @Query("page") page: Int = 1
     ): TMDbResponse
-
-    @GET("movie/{movie_id}")
-    suspend fun getMovieDetails(
-        @Path("movie_id") movieId: String,
-        @Query("api_key") apiKey: String
-    ): Movie
 
     @GET("search/movie")
     suspend fun searchMovies(

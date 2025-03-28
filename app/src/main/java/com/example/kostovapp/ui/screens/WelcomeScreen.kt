@@ -25,8 +25,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.kostovapp.R
 import com.example.kostovapp.ui.animations.BouncingImage
 import kotlinx.coroutines.delay
 
@@ -51,10 +53,10 @@ fun WelcomeScreen(onDismiss: () -> Unit) {
                     onClick = { isVisible = false; onDismiss() },
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
-                    Text("Let's Start!")
+                    Text(stringResource(R.string.start))
                 }
             },
-            title = { Text("Welcome!", fontSize = 24.sp) },
+            title = { Text(stringResource(R.string.welcome_title), fontSize = 24.sp) },
             text = {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -65,7 +67,7 @@ fun WelcomeScreen(onDismiss: () -> Unit) {
                     Spacer(modifier = Modifier.height(10.dp))
 
                     Text(
-                        "Enjoy your experience with this movie app! 🎬",
+                        stringResource(R.string.welcome_message),
                         fontSize = 16.sp,
                         color = Color.Gray
                     )

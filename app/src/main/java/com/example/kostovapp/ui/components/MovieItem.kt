@@ -33,7 +33,9 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import com.example.kostovapp.R
 import com.example.kostovapp.data.model.Movie
+import com.example.kostovapp.utils.Constants
 
 @Composable
 fun MovieItem(
@@ -72,7 +74,9 @@ fun MovieItem(
                 .clickable { onClick() }
                 .padding(12.dp)) {
             Image(
-                painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/w500${movie.poster}"),
+                painter = rememberAsyncImagePainter(Constants.TMDB_IMAGE_BASE_URL + movie.poster,
+                    placeholder = rememberAsyncImagePainter(R.drawable.profile_picture),
+                    error = rememberAsyncImagePainter(R.drawable.profile_picture)),
                 contentDescription = "${movie.title} poster",
                 modifier = Modifier
                     .size(100.dp)

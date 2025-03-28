@@ -2,10 +2,6 @@ package com.example.kostovapp.navigationcomponents
 
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
@@ -18,38 +14,26 @@ fun BottomNavigationBar(
     onTabSelected: (Int) -> Unit
 ) {
     NavigationBar {
-        val items = listOf("Home", "Favorites", "Watch Later")
-
-        items.forEachIndexed { index, title ->
+        BottomNavItem.items.forEachIndexed { index, item ->
             NavigationBarItem(
-                icon = {
-                    Icon(
-                        imageVector = when (title) {
-                            "Home" -> Icons.Default.Home
-                            "Favorites" -> Icons.Default.Favorite
-                            "Watch Later" -> Icons.Default.Check
-                            else -> Icons.Default.Home
-                        },
-                        contentDescription = title
-                    )
-                },
-                label = { Text(title) },
+                icon = { Icon(item.icon, contentDescription = item.title) },
+                label = { Text(item.title) },
                 selected = selectedTabIndex == index,
                 onClick = {
                     onTabSelected(index)
-                    when (title) {
-                        "Home" -> {
-                            if (navController.currentDestination?.route == "movies") {
-                                navController.navigate("movies") {
-                                    popUpTo("movies") { inclusive = true }
+                    when (item) {
+                        BottomNavItem.Home -> {
+                            if (navController.currentDestination?.route == BottomNavItem.Home.route) {
+                                navController.navigate(BottomNavItem.Home.route) {
+                                    popUpTo(BottomNavItem.Home.route) { inclusive = true }
                                 }
                             } else {
-                                navController.navigate("movies")
+                                navController.navigate(BottomNavItem.Home.route)
                             }
                         }
 
-                        "Favorites" -> navController.navigate("favorites")
-                        "Watch Later" -> navController.navigate("forLaterWatching")
+                        BottomNavItem.Favorites -> navController.navigate(BottomNavItem.Favorites.route)
+                        BottomNavItem.Database -> navController.navigate(BottomNavItem.Database.route)
                     }
                 }
             )

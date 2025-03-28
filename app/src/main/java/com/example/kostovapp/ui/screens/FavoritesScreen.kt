@@ -27,12 +27,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.example.kostovapp.R
 import com.example.kostovapp.data.model.Movie
+import com.example.kostovapp.utils.Constants
 import com.example.kostovapp.viewmodel.MoviesViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -42,8 +45,24 @@ fun FavoritesScreen(
     viewModel: MoviesViewModel = koinViewModel()
 ) {
     val movies by viewModel.favorites.collectAsState()
-    val favorites by viewModel.favorites.collectAsState(emptySet())
-    val allMovies = viewModel.popularMovies.value + viewModel.trendingMovies.value + viewModel.upcomingMovies.value
+    val favoritesState = viewModel.favorites.collectAsState()
+    val favorites = favoritesState.value
+
+    val popularMoviesState = viewModel.popularMovies.collectAsState()
+    val trendingMoviesState = viewModel.trendingMovies.collectAsState()
+    val upcomingMoviesState = viewModel.upcomingMovies.collectAsState()
+
+    val popularMovies = popularMoviesState.value
+    val trendingMovies = trendingMoviesState.value
+    val upcomingMovies = upcomingMoviesState.value
+
+    val favoriteMovies = listOf(
+        popularMovies,
+        trendingMovies,
+        upcomingMovies
+    ).flatten()
+        .filter { favorites.contains(it.id.toString()) }
+        .distinctBy { it.id }
 
     LaunchedEffect(Unit) {
         if (movies.isEmpty()) {
@@ -51,15 +70,13 @@ fun FavoritesScreen(
         }
     }
 
-    val favoriteMovies = allMovies.filter { it.id.toString() in favorites }
-
     Box(modifier = Modifier.fillMaxSize()) {
         if (favoriteMovies.isEmpty()) {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = "No favorite movies yet.")
+                Text(text = stringResource(R.string.no_favorites))
             }
         } else {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -89,9 +106,10 @@ fun FavoriteMovieItem(
             .padding(8.dp)
             .clickable { onClick() }
     ) {
-        val posterUrl = movie.poster?.let { "https://image.tmdb.org/t/p/w500$it" }
-            ?: "https://via.placeholder.com/100x150?text=No+Image"
-
+        val posterUrl = movie.poster?.let {
+            Constants.TMDB_IMAGE_BASE_URL + it
+        }
+            ?: Constants.TMDB_NO_IMAGE_PLACEHOLDER
         Image(
             painter = rememberAsyncImagePainter(
                 ImageRequest.Builder(LocalContext.current)

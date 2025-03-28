@@ -9,7 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
+import com.example.kostovapp.R
 import com.example.kostovapp.data.model.Movie
 import com.example.kostovapp.viewmodel.MoviesViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -25,7 +27,9 @@ fun ForLaterWatchingScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         if (savedMovies.isEmpty()) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("No movies saved for later watching.")
+                Text(
+                    stringResource(R.string.no_movies_saved)
+                )
             }
         } else {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -41,7 +45,7 @@ fun ForLaterWatchingScreen(
                         onClick = {
                             navController.navigate("details/${movieEntity.id}")
                         },
-                       onRemoveClick = {}
+                        onRemoveClick = {}
                     )
                 }
             }

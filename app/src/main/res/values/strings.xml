@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">KostovApp</string>
+    <string name="app_name_title">Kostov Movie IMDb</string>
     <string name="action_go">Go</string>
     <string name="baking_title">Baking with Gemini</string>
     <string name="label_prompt">Prompt</string>
@@ -8,4 +9,43 @@
     <string name="image2_description">Cookies</string>
     <string name="image3_description">Cake</string>
     <string name="results_placeholder">(Results will appear here)</string>
+    <string name="movie_details_unavailable">Movie details not available.</string>
+    <string name="movie_details">Movie Details</string>"
+    <string name="release_date">Release Date:</string>
+    <string name="remove_favorites">Remove from Favorites</string>
+    <string name="add_favorites">Add to Favorites</string>
+    <string name="save_later">Save for Later Watching</string>
+    <string name="remove_later">Remove from Later Watching</string>
+    <string name="remove_from_later_watching">Remove from Later Watching</string>
+    <string name="save_for_later_watching">Save for Later Watching</string>
+    <string name="watch_trailer">Watch Trailer</string>
+    <string name="no_trailer_available">No trailer available.</string>
+    <string name="back">Back</string>
+    <string name="search_movies">Search Movies</string>
+    <string name="no_movies_found">No movies found.</string>
+    <string name="popular">Popular</string>
+    <string name="trending">Trending</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="favorites">Favorites</string>
+    <string name="later_watching">Later Watching</string>
+    <string name="settings">Settings</string>
+    <string name="start">Let\'s Start!</string>
+    <string name="welcome_title">Welcome!</string>
+    <string name="welcome_message">Check out my movie app, any recommendations or suggestions will be appreciated!</string>
+    <string name="no_movies_saved">No movies saved for later watching.</string>
+    <string name="no_favorites">No favorites yet.</string>
+    <string name="remove">Remove</string>
+    <string name="add">Add</string>
+    <string name="share">Share</string>
+    <string name="watch_later">Watch later</string>
+
+
+
+
+
+
+
+
+
+
 </resources>

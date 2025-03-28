@@ -20,7 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,7 +32,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun WelcomeScreen(onDismiss: () -> Unit) {
-    var isVisible by remember { mutableStateOf(false) }
+    var isVisible by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         delay(300)
@@ -61,7 +61,9 @@ fun WelcomeScreen(onDismiss: () -> Unit) {
                     verticalArrangement = Arrangement.Center
                 ) {
                     BouncingImage()
+
                     Spacer(modifier = Modifier.height(10.dp))
+
                     Text(
                         "Enjoy your experience with this movie app! 🎬",
                         fontSize = 16.sp,

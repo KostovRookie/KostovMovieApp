@@ -7,6 +7,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.ScrollableTabRow
@@ -26,6 +30,7 @@ import com.example.kostovapp.ui.components.MovieItem
 import com.example.kostovapp.viewmodel.MoviesViewModel
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MoviesScreen(
     navController: NavHostController,
@@ -41,43 +46,52 @@ fun MoviesScreen(
     val searchResults by viewModel.searchResults.collectAsState()
     val isSearching by viewModel.isSearching.collectAsState()
 
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = isLoading,
+        onRefresh = { viewModel.loadMovies() }
+    )
+
     val tabTitles = listOf("Popular", "Trending", "Upcoming")
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        OutlinedTextField(
-            value = searchText.value,
-            onValueChange = { newText ->
-                searchText.value = newText
-                if (newText.text.isNotBlank()) {
-                    viewModel.searchMovies(newText.text)
-                } else {
-                    viewModel.loadMovies()
-                }
-            },
-            label = { Text("Search Movies") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            singleLine = true
-        )
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .pullRefresh(pullRefreshState)
+    ) {
+        Column {
+            OutlinedTextField(
+                value = searchText.value,
+                onValueChange = { newText ->
+                    searchText.value = newText
+                    if (newText.text.isNotBlank()) {
+                        viewModel.searchMovies(newText.text)
+                    } else {
+                        viewModel.loadMovies()
+                    }
+                },
+                label = { Text("Search Movies") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                singleLine = true
+            )
 
-        if (!isSearching) {
-            ScrollableTabRow(
-                selectedTabIndex = selectedTabIndex,
-                modifier = Modifier.fillMaxWidth(),
-                edgePadding = 16.dp
-            ) {
-                tabTitles.forEachIndexed { index, title ->
-                    Tab(
-                        selected = selectedTabIndex == index,
-                        onClick = { onTabSelected(index) },
-                        text = { Text(title) }
-                    )
+            if (!isSearching) {
+                ScrollableTabRow(
+                    selectedTabIndex = selectedTabIndex,
+                    modifier = Modifier.fillMaxWidth(),
+                    edgePadding = 16.dp
+                ) {
+                    tabTitles.forEachIndexed { index, title ->
+                        Tab(
+                            selected = selectedTabIndex == index,
+                            onClick = { onTabSelected(index) },
+                            text = { Text(title) }
+                        )
+                    }
                 }
             }
-        }
 
-        Box(modifier = Modifier.fillMaxSize()) {
             if (isLoading) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
@@ -92,16 +106,18 @@ fun MoviesScreen(
 
                 if (movies.isEmpty()) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(text = "No movies found.")
+                        Text("No movies found.")
                     }
                 } else {
-                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(bottom = 56.dp) // Leave space for BottomNav
+                    ) {
                         items(movies) { movie ->
                             MovieItem(
                                 movie = movie,
-                                isFavorite = viewModel.favorites.collectAsState(emptySet()).value.contains(
-                                    movie.id.toString()
-                                ),
+                                isFavorite = viewModel.favorites.collectAsState(emptySet()).value.contains(movie.id.toString()),
                                 onFavoriteClick = {
                                     if (viewModel.favorites.value.contains(movie.id.toString())) {
                                         viewModel.removeFavorite(movie.id.toString())
@@ -118,5 +134,11 @@ fun MoviesScreen(
                 }
             }
         }
+
+        PullRefreshIndicator(
+            refreshing = isLoading,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter)
+        )
     }
 }

@@ -1,4 +1,4 @@
-package com.example.kostovapp.data.datastore
+package com.example.kostovapp.data.local.datastore
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit

@@ -1,4 +1,4 @@
-package com.example.kostovapp.api
+package com.example.kostovapp.data.api
 
 import com.example.kostovapp.utils.Constants
 import retrofit2.Retrofit

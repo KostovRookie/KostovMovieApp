@@ -1,10 +1,11 @@
-package com.example.kostovapp.data.room
+package com.example.kostovapp.data.local.room
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.kostovapp.data.model.entity.MovieEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

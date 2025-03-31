@@ -1,10 +1,9 @@
-package com.example.kostovapp.navigation
+package com.example.kostovapp.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.kostovapp.navigationcomponents.BottomNavItem
 import com.example.kostovapp.ui.screens.FavoritesScreen
 import com.example.kostovapp.ui.screens.ForLaterWatchingScreen
 import com.example.kostovapp.ui.screens.MovieDetailsScreen

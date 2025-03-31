@@ -1,4 +1,4 @@
-package com.example.kostovapp.data.model
+package com.example.kostovapp.data.model.dto
 
 import com.google.gson.annotations.SerializedName
 

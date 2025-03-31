@@ -3,11 +3,11 @@ package com.example.kostovapp.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kostovapp.BuildConfig
-import com.example.kostovapp.api.TMDbApiService
+import com.example.kostovapp.data.api.TMDbApiService
 import com.example.kostovapp.data.model.Movie
-import com.example.kostovapp.data.datastore.DataStoreManager
-import com.example.kostovapp.data.room.MovieDao
-import com.example.kostovapp.data.room.MovieEntity
+import com.example.kostovapp.data.local.datastore.DataStoreManager
+import com.example.kostovapp.data.local.room.MovieDao
+import com.example.kostovapp.data.model.entity.MovieEntity
 import com.example.kostovapp.utils.Constants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

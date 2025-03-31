@@ -1,8 +1,7 @@
-package com.example.kostovapp.data.room
+package com.example.kostovapp.data.model.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-
 
 @Entity(tableName = "movies")
 data class MovieEntity(

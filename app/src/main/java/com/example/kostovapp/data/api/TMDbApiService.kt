@@ -1,7 +1,7 @@
-package com.example.kostovapp.api
+package com.example.kostovapp.data.api
 
-import com.example.kostovapp.data.model.TMDbResponse
-import com.example.kostovapp.data.model.VideoResponse
+import com.example.kostovapp.data.model.dto.TMDbResponse
+import com.example.kostovapp.data.model.dto.VideoResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

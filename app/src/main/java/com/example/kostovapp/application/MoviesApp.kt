@@ -1,4 +1,4 @@
-package com.example.kostovapp.mainactivity
+package com.example.kostovapp.application
 
 import android.app.Application
 import com.example.kostovapp.di.appModule
